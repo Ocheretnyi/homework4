@@ -1,3 +1,4 @@
 configuration.php
 vendor/
 .idea
+app/config/db_params.php
