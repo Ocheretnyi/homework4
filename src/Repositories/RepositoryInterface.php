@@ -1,12 +1,7 @@
 <?php
 
-namespace models;
-/**
- *
- *
- * Interface RepositoryInterface
- * @package Repositories
- */
+namespace Repositories;
+
 interface RepositoryInterface
 {
     /**
@@ -29,5 +24,19 @@ interface RepositoryInterface
      * @return mixed
      */
     public function remove(array $entityData);
-}
+    /**
+     * Search entity data in the DB by Id
+     * @param $id
+     * @return mixed
+     */
+    public function find($id);
 
+    /**
+     * Search all entity data in the DB
+     * @param string $limit
+     * @param string $offset
+     * @return array
+     */
+    public function findAll($limit, $offset);
+
+}

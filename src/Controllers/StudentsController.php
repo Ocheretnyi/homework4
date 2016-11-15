@@ -2,11 +2,11 @@
 
 namespace Controllers;
 
-use models\StudentsRepository;
+use Repositories\StudentsRepository;
 
 class StudentsController
 {
-    private $model;
+    private $repository;
 
     private $loader;
 
@@ -14,21 +14,24 @@ class StudentsController
 
     public function __construct($connector)
     {
-        $this->model = new StudentsRepository($connector);
-        $this->loader = new \Twig_Loader_Filesystem('src/Views/Students/');
+        $this->repository = new StudentsRepository($connector);
+        $this->loader = new \Twig_Loader_Filesystem('src/Views/templates/');
         $this->twig = new \Twig_Environment($this->loader, array(
             'cache' => false,
         ));
     }
+
     public function indexAction()
     {
-        $studentsData = $this->model->findAll();
+        $studentsData = $this->repository->findAll();
+
         return $this->twig->render('students.html.twig', ['students' => $studentsData]);
     }
+
     public function newAction()
     {
         if (isset($_POST['first_name'])) {
-            $this->model->insert(
+            $this->repository->insert(
                 [
                     'first_name' => $_POST['first_name'],
                     'last_name'  => $_POST['last_name'],
@@ -37,7 +40,7 @@ class StudentsController
             );
             return $this->indexAction();
         }
-        return $this->twig->render('students_form.html.twig',
+        return $this->twig->render('CreateStudents.html.twig',
             [
                 'first_name' => '',
                 'last_name' => '',
@@ -45,10 +48,11 @@ class StudentsController
             ]
         );
     }
+
     public function editAction()
     {
         if (isset($_POST['first_name'])) {
-            $this->model->update(
+            $this->repository->update(
                 [
                     'first_name' => $_POST['first_name'],
                     'last_name'  => $_POST['last_name'],
@@ -58,8 +62,8 @@ class StudentsController
             );
             return $this->indexAction();
         }
-        $studentData = $this->model->find((int) $_GET['id']);
-        return $this->twig->render('students_form.html.twig',
+        $studentData = $this->repository->find((int) $_GET['id']);
+        return $this->twig->render('CreateStudents.html.twig',
             [
                 'first_name' => $studentData['firstName'],
                 'last_name' => $studentData['lastName'],
@@ -67,13 +71,14 @@ class StudentsController
             ]
         );
     }
+
     public function deleteAction()
     {
         if (isset($_POST['id'])) {
             $id = (int) $_POST['id'];
-            $this->model->remove(['id' => $id]);
+            $this->repository->remove(['id' => $id]);
             return $this->indexAction();
         }
-        return $this->twig->render('students_delete.html.twig', array('student_id' => $_GET['id']));
+        return $this->twig->render('DelesteStudents.html.twig', array('student_id' => $_GET['id']));
     }
 }

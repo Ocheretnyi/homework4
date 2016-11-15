@@ -1,11 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: aleksandr
- * Date: 14.11.16
- * Time: 2:54
- */
-namespace models;
+
+namespace Repositories;
 
 class Connector
 {
@@ -20,7 +15,6 @@ class Connector
         }
 
     }
-
     public function getPdo()
     {
         return $this->pdo;
